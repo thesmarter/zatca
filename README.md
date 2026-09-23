@@ -6,6 +6,13 @@
 
 Simplifies Phase 2 e-invoicing requirements including certificate generation, invoice signing, QR code generation, and submission to ZATCA's API
 
+[![Latest Version](https://img.shields.io/packagist/v/thesmarter/zatca?style=flat-square)](https://packagist.org/packages/thesmarter/zatca)
+[![License](https://img.shields.io/packagist/l/thesmarter/zatca?style=flat-square)](LICENSE)
+[![PHP Version](https://img.shields.io/packagist/php-v/thesmarter/zatca?style=flat-square)](composer.json)
+[![Tests](https://github.com/thesmarter/zatca/actions/workflows/tests.yml/badge.svg)](https://github.com/thesmarter/zatca/actions)
+
+**Developed with ❤️ by [Smart Team](https://smart.sd)**
+
 [View Examples](https://github.com/thesmarter/zatca/tree/main/examples) • [Report a Bug](https://github.com/thesmarter/zatca/issues)
 
 ---
@@ -14,8 +21,9 @@ Simplifies Phase 2 e-invoicing requirements including certificate generation, in
 
 ## Features
 
-- **Certificate Management**: Generate CSR (Certificate Signing Request) and obtain compliance/production certificates
-- **Invoice Processing**: Hash and sign XML invoices according to ZATCA specifications
+- **Certificate Management**: Generate CSR (Certificate Signing Request) and obtain compliance/production certificates, including production CSID **renewal**
+- **UBL Invoice Builder**: Build standard/simplified invoices, credit and debit notes (388/383/381) from plain PHP arrays with automatic totals and VAT grouping
+- **Invoice Processing**: Hash and sign XML invoices according to ZATCA specifications (namespace-aware DOM signing)
 - **QR Code Generation**: Create compliant QR codes for both simplified and standard invoices
 - **Compliance Validation**: Check invoice compliance before production submission
 - **Invoice Submission**: Submit invoices to ZATCA via Reporting (simplified) or Clearance (standard) APIs
@@ -652,7 +660,7 @@ This package is open-sourced software licensed under the [MIT License](LICENSE).
 
 ## Credits
 
-Developed and maintained by [thesmarter](https://github.com/thesmarter) — [eltayeb](https://github.com/Tayeb-Ali) and [CoderX249](https://github.com/CoderX249).
+Developed and maintained by **[Smart Team](https://smart.sd)** — [eltayeb](https://github.com/Tayeb-Ali) and [CoderX249](https://github.com/CoderX249).
 
 ## Support
 
