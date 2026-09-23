@@ -102,11 +102,13 @@ class CertificateSigningRequestBuilder
      */
     private function generatePrivateKey(): void
     {
-        $this->privateKey = openssl_pkey_new($this->getOpenSslConfig());
+        $privateKey = openssl_pkey_new($this->getOpenSslConfig());
 
-        if ($this->privateKey === false) {
+        if ($privateKey === false) {
             throw new CsrGenerationException('Failed to generate private key: ' . openssl_error_string());
         }
+
+        $this->privateKey = $privateKey;
     }
 
     private function generateCsrConfigFile(): string
