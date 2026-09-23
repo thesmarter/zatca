@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
 use DOMDocument;
 use DOMElement;

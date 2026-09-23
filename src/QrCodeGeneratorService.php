@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
 use Exception;
 use SimpleXMLElement;
-use Zid\Zatca\Entities\CSID;
-use Zid\Zatca\Exceptions\QrGenerationException;
+use Smart\Zatca\Entities\CSID;
+use Smart\Zatca\Exceptions\QrGenerationException;
 
 class QrCodeGeneratorService
 {

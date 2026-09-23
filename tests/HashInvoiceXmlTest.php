@@ -1,6 +1,6 @@
 <?php
 
-namespace Zid\Zatca\Tests;
+namespace Smart\Zatca\Tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +14,7 @@ class HashInvoiceXmlTest extends TestCase
         $xmlDocumentPath = __DIR__ . '/fixtures/unsigned_invoice.xml';
         $xmlContent = file_get_contents($xmlDocumentPath);
 
-        $hashingService = new \Zid\Zatca\InvoiceHashingService();
+        $hashingService = new \Smart\Zatca\InvoiceHashingService();
         $result = $hashingService->hash($xmlContent);
 
         $this->assertEquals(

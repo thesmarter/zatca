@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
-use Zid\Zatca\API\ZatcaClient;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\API\ZatcaClient;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 /**
  * Zatca Facade - Main entry point for ZATCA E-Invoicing operations

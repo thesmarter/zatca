@@ -6,14 +6,14 @@ $invoiceData = json_decode(file_get_contents('output/invoice.json'), true);
 $canonicalXml = base64_decode($invoiceData['base64CanonicalXml']);
 $base64Hash = $invoiceData['invoiceHash'];
 
-$ccsid = \Zid\Zatca\Entities\CSID::loadFromJson('output/ccsid.json');
+$ccsid = \Smart\Zatca\Entities\CSID::loadFromJson('output/ccsid.json');
 $privateKeyContent = file_get_contents('output/private.pem');
 $privateKeyContent = str_replace(["\n", "\t", "-----BEGIN PRIVATE KEY-----", "-----END PRIVATE KEY-----"], '', $privateKeyContent);
 
-$publicKeyAndSignatureService = new \Zid\Zatca\GetPublicKeyAndSignatureService();
-$qrCodeGeneratorService = new \Zid\Zatca\QrCodeGeneratorService($publicKeyAndSignatureService);
-$digitalSignatureService = new \Zid\Zatca\GetDigitalSignatureService();
-$result = (new \Zid\Zatca\InvoiceSigningService($digitalSignatureService, $qrCodeGeneratorService))->sign(
+$publicKeyAndSignatureService = new \Smart\Zatca\GetPublicKeyAndSignatureService();
+$qrCodeGeneratorService = new \Smart\Zatca\QrCodeGeneratorService($publicKeyAndSignatureService);
+$digitalSignatureService = new \Smart\Zatca\GetDigitalSignatureService();
+$result = (new \Smart\Zatca\InvoiceSigningService($digitalSignatureService, $qrCodeGeneratorService))->sign(
     csid: $ccsid,
     privateKeyContent: $privateKeyContent,
     canonicalXml: $canonicalXml,

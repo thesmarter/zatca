@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca\Exceptions;
+namespace Smart\Zatca\Exceptions;
 
 class ZatcaApiException extends ZatcaException
 {

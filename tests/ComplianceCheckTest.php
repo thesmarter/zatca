@@ -1,10 +1,10 @@
 <?php
 
-namespace Zid\Zatca\Tests;
+namespace Smart\Zatca\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Zid\Zatca\ComplianceService;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\ComplianceService;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 /**
  * Test class for the Certificate helper.
@@ -16,7 +16,7 @@ class ComplianceCheckTest extends TestCase
         $complianceService = new ComplianceService(ZatcaEnvironment::SANDBOX);
 
         $ccsidFilePath = __DIR__ . '/fixtures/ccsid.json';
-        $ccsid = \Zid\Zatca\Entities\CSID::loadFromJson($ccsidFilePath);
+        $ccsid = \Smart\Zatca\Entities\CSID::loadFromJson($ccsidFilePath);
 
         $result = $complianceService->checkCompliance(
             binarySecurityToken: $ccsid->certificate,

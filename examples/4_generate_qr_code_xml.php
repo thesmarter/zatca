@@ -2,8 +2,8 @@
 
 require_once("../vendor/autoload.php");
 
-use Zid\Zatca\Entities\CSID;
-use Zid\Zatca\QrCodeGeneratorService;
+use Smart\Zatca\Entities\CSID;
+use Smart\Zatca\QrCodeGeneratorService;
 
 $invoiceData = json_decode(file_get_contents('output/simplified/invoice/invoice.json'), true);
 $canonicalXml = base64_decode($invoiceData['b64Invoice']);
@@ -11,7 +11,7 @@ $base64Hash = $invoiceData['invoiceHash'];
 $ccsid = CSID::loadFromJson('output/ccsid.json');
 
 $signatureValue = '....';
-$publicKeyAndSignatureService = new \Zid\Zatca\GetPublicKeyAndSignatureService();
+$publicKeyAndSignatureService = new \Smart\Zatca\GetPublicKeyAndSignatureService();
 $base64QrCode = (new QrCodeGeneratorService($publicKeyAndSignatureService))->generate(
     csid: $ccsid,
     invoiceHash: $base64Hash,

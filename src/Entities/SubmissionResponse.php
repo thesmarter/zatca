@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca\Entities;
+namespace Smart\Zatca\Entities;
 
 class SubmissionResponse
 {

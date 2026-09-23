@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
 use DOMDocument;
 use DOMXPath;
 use XSLTProcessor;
-use Zid\Zatca\Entities\InvoiceHashingResult;
-use Zid\Zatca\Exceptions\InvoiceHashingException;
+use Smart\Zatca\Entities\InvoiceHashingResult;
+use Smart\Zatca\Exceptions\InvoiceHashingException;
 
 class InvoiceHashingService
 {

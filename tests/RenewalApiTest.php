@@ -1,6 +1,6 @@
 <?php
 
-namespace Zid\Zatca\Tests;
+namespace Smart\Zatca\Tests;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -8,9 +8,9 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Zid\Zatca\API\ZatcaClient;
-use Zid\Zatca\Enums\ZatcaEnvironment;
-use Zid\Zatca\ProductionCsidGeneratorService;
+use Smart\Zatca\API\ZatcaClient;
+use Smart\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\ProductionCsidGeneratorService;
 
 class RenewalApiTest extends TestCase
 {

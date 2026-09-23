@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
-use Zid\Zatca\Exceptions\InvoiceSigningException;
+use Smart\Zatca\Exceptions\InvoiceSigningException;
 
 class GetDigitalSignatureService
 {

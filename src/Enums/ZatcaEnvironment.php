@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca\Enums;
+namespace Smart\Zatca\Enums;
 
 enum ZatcaEnvironment
 {

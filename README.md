@@ -6,7 +6,7 @@
 
 Simplifies Phase 2 e-invoicing requirements including certificate generation, invoice signing, QR code generation, and submission to ZATCA's API
 
-[View Examples](https://github.com/zidsa/zatca/tree/master/examples) • [Report a Bug](https://github.com/zidsa/zatca/issues)
+[View Examples](https://github.com/thesmarter/zatca/tree/main/examples) • [Report a Bug](https://github.com/thesmarter/zatca/issues)
 
 ---
 
@@ -38,7 +38,7 @@ Simplifies Phase 2 e-invoicing requirements including certificate generation, in
 Install the package via Composer:
 
 ```bash
-composer require zid/zatca
+composer require thesmarter/zatca
 ```
 
 ## Quick Start
@@ -51,7 +51,7 @@ First, generate a CSR and private key for your organization:
 <?php
 require_once 'vendor/autoload.php';
 
-use Zid\Zatca\CertificateSigningRequestBuilder;
+use Smart\Zatca\CertificateSigningRequestBuilder;
 
 $csrBuilder = new CertificateSigningRequestBuilder();
 
@@ -78,8 +78,8 @@ Obtain a compliance certificate from ZATCA using your CSR and OTP:
 
 ```php
 <?php
-use Zid\Zatca\ComplianceService;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\ComplianceService;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 $complianceService = new ComplianceService(ZatcaEnvironment::SANDBOX);
 
@@ -102,7 +102,7 @@ Hash your unsigned invoice XML:
 
 ```php
 <?php
-use Zid\Zatca\InvoiceHashingService;
+use Smart\Zatca\InvoiceHashingService;
 
 $xmlContent = file_get_contents('unsigned_invoice.xml');
 
@@ -122,11 +122,11 @@ Sign the invoice with your private key and compliance certificate:
 
 ```php
 <?php
-use Zid\Zatca\InvoiceSigningService;
-use Zid\Zatca\GetDigitalSignatureService;
-use Zid\Zatca\GetPublicKeyAndSignatureService;
-use Zid\Zatca\QrCodeGeneratorService;
-use Zid\Zatca\Entities\CSID;
+use Smart\Zatca\InvoiceSigningService;
+use Smart\Zatca\GetDigitalSignatureService;
+use Smart\Zatca\GetPublicKeyAndSignatureService;
+use Smart\Zatca\QrCodeGeneratorService;
+use Smart\Zatca\Entities\CSID;
 
 $invoiceData = json_decode(file_get_contents('invoice.json'), true);
 $canonicalXml = base64_decode($invoiceData['base64CanonicalXml']);
@@ -159,9 +159,9 @@ Validate your signed invoice against ZATCA's compliance checks:
 
 ```php
 <?php
-use Zid\Zatca\ComplianceService;
-use Zid\Zatca\Enums\ZatcaEnvironment;
-use Zid\Zatca\Entities\CSID;
+use Smart\Zatca\ComplianceService;
+use Smart\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Entities\CSID;
 
 $complianceService = new ComplianceService(ZatcaEnvironment::SANDBOX);
 $ccsid = CSID::loadFromJson('ccsid.json');
@@ -189,9 +189,9 @@ After successful compliance validation, request a production certificate:
 
 ```php
 <?php
-use Zid\Zatca\ProductionCsidGeneratorService;
-use Zid\Zatca\Enums\ZatcaEnvironment;
-use Zid\Zatca\Entities\CSID;
+use Smart\Zatca\ProductionCsidGeneratorService;
+use Smart\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Entities\CSID;
 
 $productionService = new ProductionCsidGeneratorService(ZatcaEnvironment::SANDBOX);
 $ccsid = CSID::loadFromJson('ccsid.json');
@@ -212,9 +212,9 @@ Submit your signed invoice to ZATCA (Reporting for simplified, Clearance for sta
 
 ```php
 <?php
-use Zid\Zatca\InvoiceSubmissionService;
-use Zid\Zatca\Enums\ZatcaEnvironment;
-use Zid\Zatca\Entities\CSID;
+use Smart\Zatca\InvoiceSubmissionService;
+use Smart\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Entities\CSID;
 
 $submissionService = new InvoiceSubmissionService(ZatcaEnvironment::PRODUCTION);
 $pcsid = CSID::loadFromJson('pcsid.json');
@@ -241,7 +241,7 @@ if ($response->isSubmitted) {
 The package supports three ZATCA environments:
 
 ```php
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 // Sandbox - For development and testing
 ZatcaEnvironment::SANDBOX
@@ -270,8 +270,8 @@ The `Zatca` facade provides a cleaner, more convenient API for accessing all ser
 <?php
 require_once 'vendor/autoload.php';
 
-use Zid\Zatca\Zatca;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Zatca;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 // Initialize the facade
 $zatca = new Zatca(ZatcaEnvironment::SANDBOX);
@@ -515,7 +515,7 @@ Validation messages from ZATCA.
 ## Build UBL Invoices From Arrays
 
 ```php
-use Zid\Zatca\InvoiceBuilder;
+use Smart\Zatca\InvoiceBuilder;
 
 $xml = InvoiceBuilder::simplified([
     'id' => 'SME-0001',
@@ -547,7 +547,7 @@ which inserts the fragments with namespace-aware DOM handling.
 ## Renew a Production Certificate
 
 ```php
-$service = (new \Zid\Zatca\Zatca(\Zid\Zatca\Enums\ZatcaEnvironment::PRODUCTION))->production();
+$service = (new \Smart\Zatca\Zatca(\Smart\Zatca\Enums\ZatcaEnvironment::PRODUCTION))->production();
 
 $csid = $service->renewProductionCertificate(
     binarySecurityToken: $pcsid->certificate,
@@ -589,9 +589,9 @@ vendor/bin/phpunit
 The package throws specific exceptions for different error scenarios:
 
 ```php
-use Zid\Zatca\Exceptions\ZatcaApiException;
-use Zid\Zatca\Exceptions\InvoiceHashingException;
-use Zid\Zatca\Exceptions\QrGenerationException;
+use Smart\Zatca\Exceptions\ZatcaApiException;
+use Smart\Zatca\Exceptions\InvoiceHashingException;
+use Smart\Zatca\Exceptions\QrGenerationException;
 
 try {
     // Your code here
@@ -652,11 +652,11 @@ This package is open-sourced software licensed under the [MIT License](LICENSE).
 
 ## Credits
 
-Developed and maintained by [Zid](https://zid.sa)
+Developed and maintained by [thesmarter](https://github.com/thesmarter) — [eltayeb](https://github.com/Tayeb-Ali) and [CoderX249](https://github.com/CoderX249).
 
 ## Support
 
-For issues, questions, or contributions, please visit the [GitHub repository](https://github.com/zidsa/zatca).
+For issues, questions, or contributions, please visit the [GitHub repository](https://github.com/thesmarter/zatca).
 
 ---
 

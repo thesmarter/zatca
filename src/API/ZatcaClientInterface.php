@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca\API;
+namespace Smart\Zatca\API;
 
 use GuzzleHttp\ClientInterface;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 interface ZatcaClientInterface
 {

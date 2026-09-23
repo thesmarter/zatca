@@ -1,9 +1,9 @@
 <?php
 require_once("../vendor/autoload.php");;
 
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
-$complianceService = new \Zid\Zatca\ComplianceService(ZatcaEnvironment::SANDBOX);
+$complianceService = new \Smart\Zatca\ComplianceService(ZatcaEnvironment::SANDBOX);
 
 $csr = file_get_contents('output/certificate.csr');
 $ccsid = $complianceService->requestComplianceCertificate(

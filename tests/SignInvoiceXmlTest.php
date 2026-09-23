@@ -1,13 +1,13 @@
 <?php
 
-namespace Zid\Zatca\Tests;
+namespace Smart\Zatca\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Zid\Zatca\Entities\CSID;
-use Zid\Zatca\Exceptions\InvoiceSigningException;
-use Zid\Zatca\GetDigitalSignatureService;
-use Zid\Zatca\InvoiceSigningService;
-use Zid\Zatca\QrCodeGeneratorService;
+use Smart\Zatca\Entities\CSID;
+use Smart\Zatca\Exceptions\InvoiceSigningException;
+use Smart\Zatca\GetDigitalSignatureService;
+use Smart\Zatca\InvoiceSigningService;
+use Smart\Zatca\QrCodeGeneratorService;
 
 class SignInvoiceXmlTest extends TestCase
 {

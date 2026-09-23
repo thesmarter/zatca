@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
-use Zid\Zatca\Enums\ZatcaEnvironment;
-use Zid\Zatca\Exceptions\CsrGenerationException;
+use Smart\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Exceptions\CsrGenerationException;
 
 class CertificateSigningRequestBuilder
 {

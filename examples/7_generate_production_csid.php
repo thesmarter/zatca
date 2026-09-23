@@ -1,11 +1,11 @@
 <?php
 require_once("../vendor/autoload.php");;
 
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
-$productionCsidGenerator = new \Zid\Zatca\ProductionCsidGeneratorService(ZatcaEnvironment::SANDBOX);
+$productionCsidGenerator = new \Smart\Zatca\ProductionCsidGeneratorService(ZatcaEnvironment::SANDBOX);
 
-$ccsid = \Zid\Zatca\Entities\CSID::loadFromJson('output/ccsid.json');
+$ccsid = \Smart\Zatca\Entities\CSID::loadFromJson('output/ccsid.json');
 
 $pcsid = $productionCsidGenerator->requestProductionCertificate(
     binarySecurityToken: $ccsid->certificate,

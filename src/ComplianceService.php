@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
-use Zid\Zatca\API\ZatcaClient;
-use Zid\Zatca\Entities\CSID;
-use Zid\Zatca\Entities\ValidationResponse;
-use Zid\Zatca\Entities\ValidationResults;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\API\ZatcaClient;
+use Smart\Zatca\Entities\CSID;
+use Smart\Zatca\Entities\ValidationResponse;
+use Smart\Zatca\Entities\ValidationResults;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 class ComplianceService
 {

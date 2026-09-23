@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca\API;
+namespace Smart\Zatca\API;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Client;
-use Zid\Zatca\Enums\ZatcaEnvironment;
-use Zid\Zatca\Exceptions\ZatcaApiException;
+use Smart\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Exceptions\ZatcaApiException;
 
 class ZatcaClient implements ZatcaClientInterface
 {

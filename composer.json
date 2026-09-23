@@ -2,16 +2,22 @@
     "name": "thesmarter/zatca",
     "description": "ZATCA E-Invoicing integration tools",
     "keywords": [
-        "zid",
-        "zatca"
+        "zatca",
+        "fatoora",
+        "e-invoicing"
     ],
-    "homepage": "https://github.com/zidsa/zatca-php-package",
+    "homepage": "https://github.com/thesmarter/zatca",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
-            "name": "Islam Abdelfattah",
-            "email": "i.mohammed@zid.sa",
+            "name": "eltayeb",
+            "email": "elteyab@smart.sd",
+            "role": "Developer"
+        },
+        {
+            "name": "CoderX249",
+            "email": "324578372+CoderX249@users.noreply.github.com",
             "role": "Developer"
         }
     ],
@@ -30,12 +36,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Zid\\Zatca\\": "src"
+            "Smart\\Zatca\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Zid\\Zatca\\Tests\\": "tests"
+            "Smart\\Zatca\\Tests\\": "tests"
         }
     },
     "scripts": {

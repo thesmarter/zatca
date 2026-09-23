@@ -1,11 +1,11 @@
 <?php
 require_once("../vendor/autoload.php");;
 
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
-$complianceService = new \Zid\Zatca\ComplianceService(ZatcaEnvironment::SANDBOX);
+$complianceService = new \Smart\Zatca\ComplianceService(ZatcaEnvironment::SANDBOX);
 
-$ccsid = \Zid\Zatca\Entities\CSID::loadFromJson('output/ccsid.json');
+$ccsid = \Smart\Zatca\Entities\CSID::loadFromJson('output/ccsid.json');
 
 $result = $complianceService->checkCompliance(
     binarySecurityToken: $ccsid->certificate,

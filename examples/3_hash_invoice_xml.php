@@ -4,7 +4,7 @@ require_once("../vendor/autoload.php");;
 $xmlDocumentPath = 'output/unsigned_simplified_invoice_standard.xml';
 $xmlContent = file_get_contents($xmlDocumentPath);
 
-$hashingService = new \Zid\Zatca\InvoiceHashingService();
+$hashingService = new \Smart\Zatca\InvoiceHashingService();
 $result = $hashingService->hash($xmlContent);
 
 var_dump([

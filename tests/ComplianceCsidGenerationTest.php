@@ -1,10 +1,10 @@
 <?php
 
-namespace Zid\Zatca\Tests;
+namespace Smart\Zatca\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Zid\Zatca\ComplianceService;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\ComplianceService;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 /**
  * Test class for the Certificate helper.

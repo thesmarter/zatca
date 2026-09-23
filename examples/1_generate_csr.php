@@ -1,7 +1,7 @@
 <?php
 require_once("../vendor/autoload.php");;
 
-use Zid\Zatca\CertificateSigningRequestBuilder;
+use Smart\Zatca\CertificateSigningRequestBuilder;
 
 $zatcaCsrBuilder = new CertificateSigningRequestBuilder();
 

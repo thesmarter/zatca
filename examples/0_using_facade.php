@@ -1,8 +1,8 @@
 <?php
 require_once("../vendor/autoload.php");
 
-use Zid\Zatca\Zatca;
-use Zid\Zatca\Enums\ZatcaEnvironment;
+use Smart\Zatca\Zatca;
+use Smart\Zatca\Enums\ZatcaEnvironment;
 
 // Initialize the Zatca facade
 $zatca = new Zatca(ZatcaEnvironment::SANDBOX);

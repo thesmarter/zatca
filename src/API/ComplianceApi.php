@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca\API;
+namespace Smart\Zatca\API;
 
 class ComplianceApi implements ZatcaApiInterface
 {

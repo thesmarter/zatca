@@ -1,10 +1,10 @@
 <?php
 
-namespace Zid\Zatca\Tests;
+namespace Smart\Zatca\Tests;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Zid\Zatca\InvoiceBuilder;
+use Smart\Zatca\InvoiceBuilder;
 
 class UblInvoiceBuilderTest extends TestCase
 {

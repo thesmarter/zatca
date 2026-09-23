@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Zid\Zatca;
+namespace Smart\Zatca;
 
 use DateTime;
 use DOMDocument;
 use DOMNode;
 use DOMXPath;
-use Zid\Zatca\Entities\CSID;
-use Zid\Zatca\Entities\InvoiceSigningResult;
-use Zid\Zatca\Exceptions\InvoiceSigningException;
+use Smart\Zatca\Entities\CSID;
+use Smart\Zatca\Entities\InvoiceSigningResult;
+use Smart\Zatca\Exceptions\InvoiceSigningException;
 
 class InvoiceSigningService
 {
