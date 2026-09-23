@@ -3,6 +3,17 @@
 All notable changes to `thesmarter/zatca` are documented here. The format is
 based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [1.1.0] - 2026-09-23
+
+### Added
+- Bilingual documentation: full Arabic `README.ar.md` with language switcher.
+- Examples 8 (UBL builder) and 9 (production CSID renewal).
+- `CONTRIBUTING.md`, `SECURITY.md`, `.editorconfig`, `.gitattributes`.
+
+### Changed
+- Full PSR-12 compliance enforced by `phpcs.xml` + CI `lint` job
+  (`composer validate --strict`, code style, PHP 8.1–8.5 matrix).
+
 ## [1.0.0] - 2026-09-23
 
 First stable release.
