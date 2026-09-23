@@ -18,8 +18,10 @@ class GetDigitalSignatureService
 
         $privateKeyContent = str_replace(["\n", "\t"], '', $privateKeyContent);
 
-        if (strpos($privateKeyContent, "-----BEGIN EC PRIVATE KEY-----") === false &&
-            strpos($privateKeyContent, "-----END EC PRIVATE KEY-----") === false) {
+        if (
+            strpos($privateKeyContent, "-----BEGIN EC PRIVATE KEY-----") === false &&
+            strpos($privateKeyContent, "-----END EC PRIVATE KEY-----") === false
+        ) {
             $privateKeyContent = "-----BEGIN EC PRIVATE KEY-----\n" .
                 chunk_split($privateKeyContent, 64, "\n") .
                 "-----END EC PRIVATE KEY-----\n";

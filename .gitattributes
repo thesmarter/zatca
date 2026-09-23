@@ -1,0 +1,6 @@
+* text=auto
+
+tests/ export-ignore
+examples/output/ export-ignore
+.github/ export-ignore
+phpunit.xml export-ignore

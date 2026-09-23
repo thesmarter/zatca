@@ -27,6 +27,5 @@ class ComplianceCsidGenerationTest extends TestCase
             $ccsid->requestId,
             'Request ID is not valid'
         );
-
     }
 }

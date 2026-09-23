@@ -7,6 +7,38 @@ on:
     branches: [ main, master, develop ]
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    name: Lint (PHP 8.3)
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: openssl, dom, xsl, json, bcmath, simplexml
+        coverage: none
+
+    - name: Cache Composer packages
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-8.3-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-8.3-
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Validate composer.json
+      run: composer validate --strict
+
+    - name: Check code style (PSR-12)
+      run: vendor/bin/phpcs
+
   test:
     runs-on: ubuntu-latest
     

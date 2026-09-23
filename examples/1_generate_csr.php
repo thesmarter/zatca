@@ -1,5 +1,6 @@
 <?php
-require_once("../vendor/autoload.php");;
+
+require_once("../vendor/autoload.php");
 
 use Smart\Zatca\CertificateSigningRequestBuilder;
 
@@ -24,4 +25,3 @@ echo $zatcaCsrBuilder->getPrivateKey() . PHP_EOL;
 
 $zatcaCsrBuilder->saveCsr('output/certificate.csr');
 $zatcaCsrBuilder->savePrivateKey('output/private.pem');
-

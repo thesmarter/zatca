@@ -13,14 +13,14 @@ class SignInvoiceXmlTest extends TestCase
 {
     private function signingService(string $fakeQr): InvoiceSigningService
     {
-        $digitalSignature = new class() extends GetDigitalSignatureService {
+        $digitalSignature = new class () extends GetDigitalSignatureService {
             public function get(string $invoiceHash, string $privateKeyContent): string
             {
                 return base64_encode('fake-signature-bytes');
             }
         };
 
-        $qr = new class($fakeQr) extends QrCodeGeneratorService {
+        $qr = new class ($fakeQr) extends QrCodeGeneratorService {
             public function __construct(private string $fakeQr)
             {
             }

@@ -40,6 +40,5 @@ class HashInvoiceXmlTest extends TestCase
             $result->b64CanonicalXml,
             'Base64 Canonical XML is not valid'
         );
-
     }
 }

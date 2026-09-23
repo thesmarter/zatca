@@ -28,8 +28,7 @@ class InvoiceSubmissionService
         string $invoiceHash,
         string $invoiceUuid,
         string $invoiceXml,
-    ): SubmissionResponse
-    {
+    ): SubmissionResponse {
         $api = $isSimplified ? $this->zatcaClient->reportingApi() : $this->zatcaClient->clearanceApi();
         try {
             $response = $api->single(

@@ -1,3 +1,5 @@
+English | [العربية](README.ar.md)
+
 <div align="center">
 
 # 🧾 ZATCA E-Invoicing Phase 2
@@ -19,6 +21,36 @@ Simplifies Phase 2 e-invoicing requirements including certificate generation, in
 
 </div>
 
+## Table of Contents
+
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+  - [1. Generate Certificate Signing Request (CSR)](#1-generate-certificate-signing-request-csr)
+  - [2. Request Compliance Certificate](#2-request-compliance-certificate)
+  - [3. Hash Invoice XML](#3-hash-invoice-xml)
+  - [4. Sign Invoice](#4-sign-invoice)
+  - [5. Check Compliance](#5-check-compliance)
+  - [6. Generate Production Certificate](#6-generate-production-certificate)
+  - [7. Submit Invoice to ZATCA](#7-submit-invoice-to-zatca)
+- [Environment Configuration](#environment-configuration)
+- [Using the Facade](#using-the-facade-alternative-approach)
+- [Invoice Types](#invoice-types)
+- [API Reference](#api-reference)
+- [Build UBL Invoices From Arrays](#build-ubl-invoices-from-arrays)
+- [Renew a Production Certificate](#renew-a-production-certificate)
+- [Examples](#examples)
+- [Testing](#testing)
+- [Error Handling](#error-handling)
+- [Best Practices](#best-practices)
+- [ZATCA Integration Workflow](#zatca-integration-workflow)
+- [Resources](#resources)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
+- [Support](#support)
+
 ## Features
 
 - **Certificate Management**: Generate CSR (Certificate Signing Request) and obtain compliance/production certificates, including production CSID **renewal**
@@ -32,7 +64,7 @@ Simplifies Phase 2 e-invoicing requirements including certificate generation, in
 
 ## Requirements
 
-- PHP 8.1 or higher
+- PHP **>= 8.1**
 - Required PHP extensions:
   - `ext-openssl`
   - `ext-dom`
@@ -40,6 +72,7 @@ Simplifies Phase 2 e-invoicing requirements including certificate generation, in
   - `ext-json`
   - `ext-bcmath`
   - `ext-simplexml`
+- [Composer](https://getcomposer.org/) for dependency management
 
 ## Installation
 
@@ -340,7 +373,7 @@ if ($validationResponse->validationResults->status === 'PASS') {
         ccsidRequestId: $ccsid->requestId
     );
     $pcsid->saveAsJson('pcsid.json');
-    
+
     // 7. Submit invoice to production
     $submissionResult = $zatca->submission()->submit(
         csid: $pcsid,
@@ -349,7 +382,7 @@ if ($validationResponse->validationResults->status === 'PASS') {
         invoiceUuid: $hashingResult->uuid,
         invoiceXml: base64_decode($signingResult->b64SignedInvoice)
     );
-    
+
     if ($submissionResult->isSubmitted) {
         echo "Invoice submitted successfully!" . PHP_EOL;
     }
@@ -362,19 +395,21 @@ The `Zatca` facade provides the following methods:
 
 ```php
 // Access services
-$zatca->compliance()    // ComplianceService
-$zatca->production()    // ProductionCsidGeneratorService
-$zatca->submission()    // InvoiceSubmissionService
-$zatca->hashing()       // InvoiceHashingService
-$zatca->signing()       // InvoiceSigningService
-$zatca->qrCode()        // QrCodeGeneratorService
-$zatca->csrBuilder()    // CertificateSigningRequestBuilder
-$zatca->client()        // ZatcaClient (for direct API access)
+$zatca->compliance()      // ComplianceService
+$zatca->production()      // ProductionCsidGeneratorService
+$zatca->submission()      // InvoiceSubmissionService
+$zatca->hashing()         // InvoiceHashingService
+$zatca->signing()         // InvoiceSigningService
+$zatca->qrCode()          // QrCodeGeneratorService
+$zatca->csrBuilder()      // CertificateSigningRequestBuilder
+$zatca->invoiceBuilder()  // InvoiceBuilder (UBL invoice builder)
+$zatca->client()          // ZatcaClient (for direct API access)
 ```
 
 ### Comparison: Traditional vs Facade
 
 **Traditional Approach:**
+
 ```php
 // Manual dependency injection
 $digitalSignatureService = new GetDigitalSignatureService();
@@ -386,6 +421,7 @@ $result = $signingService->sign(...);
 ```
 
 **Facade Approach:**
+
 ```php
 // Clean and simple
 $zatca = new Zatca(ZatcaEnvironment::SANDBOX);
@@ -395,11 +431,13 @@ $result = $zatca->signing()->sign(...);
 The facade handles all dependency injection automatically, making your code cleaner and easier to maintain.
 
 ## Invoice Types
+
 When generating CSR, specify the invoice type using a 4-digit code:
 
 - `1100` - Standard & Simplified Invoices
 - `0100` - Simplified Invoice Only (B2C)
 - `1000` - Standard Invoice Only (B2B)
+
 Each digit acts as a boolean flag: `[Standard, Simplified, Future Use, Future Use]`
 
 ## API Reference
@@ -407,9 +445,11 @@ Each digit acts as a boolean flag: `[Standard, Simplified, Future Use, Future Us
 ### Core Services
 
 #### CertificateSigningRequestBuilder
+
 Generates CSR and private key for ZATCA onboarding.
 
 **Methods:**
+
 - `setCommonName(string $name)` - Set common name
 - `setSerialNumber(string $solutionProvider, string $solutionName, string $serialNumber)` - Set device serial number
 - `setOrganizationIdentifier(string $id)` - Set organization tax ID
@@ -426,85 +466,119 @@ Generates CSR and private key for ZATCA onboarding.
 - `savePrivateKey(string $path)` - Save private key to file
 
 #### ComplianceService
+
 Handles compliance certificate requests and validation.
 
 **Methods:**
+
 - `requestComplianceCertificate(string $b64Csr, string $otp): CSID`
 - `checkCompliance(string $binarySecurityToken, string $secret, string $invoiceHash, string $invoiceUuid, string $signedInvoice): ValidationResponse`
 
 #### InvoiceHashingService
+
 Hashes invoice XML according to ZATCA specifications.
 
 **Methods:**
+
 - `hash(string $unsignedInvoiceXml): InvoiceHashingResult`
 
 #### InvoiceSigningService
+
 Signs invoices with digital signature and generates QR codes.
 
 **Methods:**
+
 - `sign(CSID $csid, string $privateKeyContent, string $canonicalXml, string $invoiceHash): InvoiceSigningResult`
 
 #### QrCodeGeneratorService
+
 Generates ZATCA-compliant QR codes.
 
 **Methods:**
+
 - `generate(CSID $csid, string $invoiceHash, string $canonicalXml, string $signatureValue): string`
 
 #### ProductionCsidGeneratorService
-Requests production certificates after compliance validation.
+
+Requests production certificates after compliance validation, and renews them when needed.
 
 **Methods:**
+
 - `requestProductionCertificate(string $binarySecurityToken, string $secret, string $ccsidRequestId): CSID`
+- `renewProductionCertificate(string $binarySecurityToken, string $secret, string $otp, string $b64Csr): CSID`
 
 #### InvoiceSubmissionService
+
 Submits invoices to ZATCA via Reporting or Clearance APIs.
 
 **Methods:**
+
 - `submit(CSID $csid, bool $isSimplified, string $invoiceHash, string $invoiceUuid, string $invoiceXml): SubmissionResponse`
+
+#### InvoiceBuilder
+
+Builds UBL 2.1 invoice XML (unsigned) from plain PHP arrays, with automatic totals and VAT grouping.
+
+**Methods:**
+
+- `InvoiceBuilder::simplified(array $data): string` - Build a simplified (B2C) invoice
+- `InvoiceBuilder::standard(array $data): string` - Build a standard (B2B) invoice
+- `InvoiceBuilder::build(array $data): string` - Build any supported type (`invoice` 388, `credit` 383, `debit` 381)
 
 ### Entities
 
 #### CSID
+
 Represents a Certificate Signing ID (compliance or production certificate).
 
 **Properties:**
+
 - `string $certificate` - Base64 encoded certificate
 - `string $secret` - Certificate secret
 - `string $requestId` - Request ID from ZATCA
 
 **Methods:**
+
 - `static loadFromJson(string $filepath): self`
 - `saveAsJson(string $filepath): void`
 
 #### InvoiceHashingResult
+
 Result of invoice hashing operation.
 
 **Properties:**
+
 - `string $invoiceHash` - Base64 encoded SHA-256 hash
 - `string $uuid` - Invoice UUID
 - `string $b64Invoice` - Base64 encoded invoice
 - `string $b64CanonicalXml` - Base64 encoded canonical XML
 
 #### InvoiceSigningResult
+
 Result of invoice signing operation.
 
 **Properties:**
+
 - `string $signature` - Digital signature
 - `string $b64SignedInvoice` - Base64 encoded signed invoice
 - `string $b64QrCode` - Base64 encoded QR code
 
 #### SubmissionResponse
+
 Response from invoice submission to ZATCA.
 
 **Properties:**
+
 - `ValidationResults $validationResults` - Validation messages
 - `string $status` - Submission status (REPORTED/CLEARED)
 - `bool $isSubmitted` - Whether submission was successful
 
 #### ValidationResponse
+
 Response from compliance validation.
 
 **Properties:**
+
 - `ValidationResults $validationResults` - Validation messages
 - `string|null $reportingStatus` - Reporting status
 - `string|null $clearanceStatus` - Clearance status
@@ -512,9 +586,11 @@ Response from compliance validation.
 - `string|null $qrBuyerStatus` - QR buyer status
 
 #### ValidationResults
+
 Validation messages from ZATCA.
 
 **Properties:**
+
 - `array $infoMessages` - Informational messages
 - `array $warningMessages` - Warning messages
 - `array $errorMessages` - Error messages
@@ -569,7 +645,7 @@ $csid = $service->renewProductionCertificate(
 
 Complete working examples are available in the `examples/` directory:
 
-1. `0_using_facade.php` - **Using the Zatca Facade (Recommended)**
+1. `0_using_facade.php` - Using the Zatca Facade (Recommended)
 2. `1_generate_csr.php` - Generate CSR and private key
 3. `2_generate_compliance_csid.php` - Request compliance certificate
 4. `3_hash_invoice_xml.php` - Hash invoice XML
@@ -577,6 +653,8 @@ Complete working examples are available in the `examples/` directory:
 6. `5_sign_invoice_xml.php` - Sign invoice
 7. `6_check_compliance.php` - Validate compliance
 8. `7_generate_production_csid.php` - Request production certificate
+9. `8_build_ubl_invoice.php` - Build a UBL invoice from PHP arrays
+10. `9_renew_production_csid.php` - Renew a production certificate
 
 ## Testing
 
@@ -626,7 +704,7 @@ try {
 
 ## ZATCA Integration Workflow
 
-```
+```text
 1. Generate CSR + Private Key
    ↓
 2. Request Compliance Certificate (with OTP)

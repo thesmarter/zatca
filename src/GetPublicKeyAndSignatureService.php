@@ -11,11 +11,11 @@ class GetPublicKeyAndSignatureService
     public function get(string $certificateBase64): array
     {
         $tempFile = null;
-        
+
         try {
             // Step 1: Create a temporary file for the certificate
             $tempFile = tempnam(sys_get_temp_dir(), 'cert');
-            
+
             if ($tempFile === false) {
                 throw new Exception("Cannot create temporary file");
             }
@@ -31,20 +31,20 @@ class GetPublicKeyAndSignatureService
 
             // Step 3: Read the certificate
             $cert = openssl_x509_read($certContent);
-            
+
             if ($cert === false) {
                 throw new Exception("Failed to read certificate");
             }
 
             // Step 4: Extract the public key
             $pubKey = openssl_pkey_get_public($cert);
-            
+
             if ($pubKey === false) {
                 throw new Exception("Failed to extract public key from certificate");
             }
-            
+
             $pubKeyDetails = openssl_pkey_get_details($pubKey);
-            
+
             if ($pubKeyDetails === false || !isset($pubKeyDetails['ec']['x'], $pubKeyDetails['ec']['y'])) {
                 throw new Exception("Failed to get public key details or EC components missing");
             }
@@ -58,42 +58,59 @@ class GetPublicKeyAndSignatureService
             $y = str_pad($y, 32, "\0", STR_PAD_LEFT);
 
             // Prepare the raw public key in uncompressed DER format
-            $publicKeyDER = pack('C*',
+            $publicKeyDER = pack(
+                'C*',
                 0x30, // SEQUENCE
                 0x56, // Total length of the sequence (to be calculated)
                 0x30, // SEQUENCE for the algorithm
                 0x10, // Length of the OID
-                0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, // OID for EC
-                0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x0A, // OID for secp256k1
-                0x03, 0x42, // BIT STRING tag and length
-                0x00, 0x04, // Length of the uncompressed public key (2 * 32 bytes)
+                0x06,
+                0x07,
+                0x2A,
+                0x86,
+                0x48,
+                0xCE,
+                0x3D,
+                0x02,
+                0x01, // OID for EC
+                0x06,
+                0x05,
+                0x2B,
+                0x81,
+                0x04,
+                0x00,
+                0x0A, // OID for secp256k1
+                0x03,
+                0x42, // BIT STRING tag and length
+                0x00,
+                0x04, // Length of the uncompressed public key (2 * 32 bytes)
                 ...array_values(unpack('C*', $x)), // x
                 ...array_values(unpack('C*', $y))  // y
             );
 
             // Step 6: Extract the ECDSA signature from DER data
             $certPEM = file_get_contents($tempFile);
-            
+
             if ($certPEM === false) {
                 throw new Exception("Failed to read certificate from temporary file");
             }
-            
+
             if (!preg_match('/-+BEGIN CERTIFICATE-+\s+(.+)\s+-+END CERTIFICATE-+/s', $certPEM, $matches)) {
                 throw new Exception("Error extracting DER data from certificate.");
             }
 
             $derData = base64_decode($matches[1]);
-            
+
             if ($derData === false) {
                 throw new Exception("Failed to decode certificate DER data");
             }
-            
+
             $sequencePos = strpos($derData, "\x30", -72);
-            
+
             if ($sequencePos === false) {
                 throw new Exception("Failed to locate signature sequence in DER data");
             }
-            
+
             $signature = substr($derData, $sequencePos);
 
             // Return the correctly extracted details
@@ -102,7 +119,6 @@ class GetPublicKeyAndSignatureService
                 'public_key_raw' => $publicKeyDER, // Raw public key in DER format
                 'signature' => $signature         // Raw ECDSA signature bytes
             ];
-
         } catch (Exception $e) {
             throw new Exception("[Error] Failed to process certificate: " . $e->getMessage());
         } finally {

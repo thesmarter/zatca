@@ -9,7 +9,7 @@ use Smart\Zatca\Enums\ZatcaEnvironment;
 
 /**
  * Zatca Facade - Main entry point for ZATCA E-Invoicing operations
- * 
+ *
  * Provides convenient access to all ZATCA services:
  * - Certificate generation (CSR, Compliance CSID, Production CSID)
  * - Invoice operations (hashing, signing, QR code generation)
@@ -48,7 +48,7 @@ class Zatca
         if ($this->complianceService === null) {
             $this->complianceService = new ComplianceService($this->environment);
         }
-        
+
         return $this->complianceService;
     }
 
@@ -60,7 +60,7 @@ class Zatca
         if ($this->productionCsidService === null) {
             $this->productionCsidService = new ProductionCsidGeneratorService($this->environment);
         }
-        
+
         return $this->productionCsidService;
     }
 
@@ -72,7 +72,7 @@ class Zatca
         if ($this->submissionService === null) {
             $this->submissionService = new InvoiceSubmissionService($this->environment);
         }
-        
+
         return $this->submissionService;
     }
 
@@ -84,7 +84,7 @@ class Zatca
         if ($this->hashingService === null) {
             $this->hashingService = new InvoiceHashingService();
         }
-        
+
         return $this->hashingService;
     }
 
@@ -97,10 +97,10 @@ class Zatca
             $digitalSignatureService = new GetDigitalSignatureService();
             $publicKeyService = new GetPublicKeyAndSignatureService();
             $qrCodeService = new QrCodeGeneratorService($publicKeyService);
-            
+
             $this->signingService = new InvoiceSigningService($digitalSignatureService, $qrCodeService);
         }
-        
+
         return $this->signingService;
     }
 
@@ -113,7 +113,7 @@ class Zatca
             $publicKeyService = new GetPublicKeyAndSignatureService();
             $this->qrCodeService = new QrCodeGeneratorService($publicKeyService);
         }
-        
+
         return $this->qrCodeService;
     }
 

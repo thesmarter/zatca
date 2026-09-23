@@ -1,5 +1,6 @@
 <?php
-require_once("../vendor/autoload.php");;
+
+require_once("../vendor/autoload.php");
 
 use Smart\Zatca\Enums\ZatcaEnvironment;
 
@@ -31,4 +32,4 @@ echo $renewed->secret . PHP_EOL;
 echo 'Request ID:' . PHP_EOL;
 echo $renewed->requestId . PHP_EOL;
 
-$renewed->saveAsJson('output/pcsid.json');;
+$renewed->saveAsJson('output/pcsid.json');

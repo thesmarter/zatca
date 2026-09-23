@@ -139,7 +139,7 @@ class CertificateSigningRequestBuilder
 
     private function getAsnTemplate(): string
     {
-        return match($this->environment) {
+        return match ($this->environment) {
             ZatcaEnvironment::PRODUCTION => 'ZATCA-Code-Signing',
             ZatcaEnvironment::SIMULATION => 'PREZATCA-Code-Signing',
             ZatcaEnvironment::SANDBOX => 'TSTZATCA-Code-Signing',

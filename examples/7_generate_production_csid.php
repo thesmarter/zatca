@@ -1,5 +1,6 @@
 <?php
-require_once("../vendor/autoload.php");;
+
+require_once("../vendor/autoload.php");
 
 use Smart\Zatca\Enums\ZatcaEnvironment;
 
@@ -20,4 +21,4 @@ echo $pcsid->secret . PHP_EOL;
 echo 'Request ID:' . PHP_EOL;
 echo $pcsid->requestId . PHP_EOL;
 
-$pcsid->saveAsJson('output/pcsid.json');;
+$pcsid->saveAsJson('output/pcsid.json');

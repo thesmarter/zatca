@@ -1,4 +1,5 @@
 <?php
+
 require_once("../vendor/autoload.php");
 
 $qrCode = file_get_contents('output/qr_code.txt');
@@ -34,4 +35,3 @@ echo "Hex Dump QR Code:\n";
 echo chunk_split($hexDump, 2, ' ');
 file_put_contents('output/qr_code.txt', $result->b64QrCode);
 file_put_contents('output/qr_code.png', $binaryData);
-

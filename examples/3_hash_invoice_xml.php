@@ -1,5 +1,6 @@
 <?php
-require_once("../vendor/autoload.php");;
+
+require_once("../vendor/autoload.php");
 
 $xmlDocumentPath = 'output/unsigned_simplified_invoice_standard.xml';
 $xmlContent = file_get_contents($xmlDocumentPath);

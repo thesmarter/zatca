@@ -169,7 +169,8 @@ class InvoiceSigningService
         return $nodes;
     }
 
-    private function getIssuerName($certInfo) {
+    private function getIssuerName($certInfo)
+    {
         $issuer = $certInfo['issuer'];
 
         if (isset($issuer['DC']) && is_array($issuer['DC'])) {
@@ -192,7 +193,8 @@ class InvoiceSigningService
         return implode(", ", $issuerNameParts);
     }
 
-    private function getSerialNumberForCertificateObject($certInfo) {
+    private function getSerialNumberForCertificateObject($certInfo)
+    {
         $serialNumberHex = $certInfo['serialNumberHex'];
 
         $serialNumberDec = '0';
@@ -206,7 +208,8 @@ class InvoiceSigningService
         return $serialNumberDec;
     }
 
-    private function getSignedPropertiesHash($signingTime, $digestValue, $x509IssuerName, $x509SerialNumber) {
+    private function getSignedPropertiesHash($signingTime, $digestValue, $x509IssuerName, $x509SerialNumber)
+    {
 
         // Construct the XML string with exactly 36 spaces in front of <xades:SignedSignatureProperties>
         $xmlString = '<xades:SignedProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Id="xadesSignedProperties">' . "\n" .

@@ -1,5 +1,6 @@
 <?php
-require_once("../vendor/autoload.php");;
+
+require_once("../vendor/autoload.php");
 
 use Smart\Zatca\Enums\ZatcaEnvironment;
 
@@ -19,4 +20,4 @@ echo 'Request ID:' . PHP_EOL;
 echo $ccsid->requestId . PHP_EOL;
 
 
-$ccsid->saveAsJson('output/ccsid.json');;
+$ccsid->saveAsJson('output/ccsid.json');
