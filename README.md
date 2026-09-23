@@ -387,7 +387,6 @@ $result = $zatca->signing()->sign(...);
 The facade handles all dependency injection automatically, making your code cleaner and easier to maintain.
 
 ## Invoice Types
-
 When generating CSR, specify the invoice type using a 4-digit code:
 
 - `1100` - Standard & Simplified Invoices
@@ -512,6 +511,51 @@ Validation messages from ZATCA.
 - `array $warningMessages` - Warning messages
 - `array $errorMessages` - Error messages
 - `string $status` - Overall validation status
+
+## Build UBL Invoices From Arrays
+
+```php
+use Zid\Zatca\InvoiceBuilder;
+
+$xml = InvoiceBuilder::simplified([
+    'id' => 'SME-0001',
+    'uuid' => 'a9ea6c06-1a83-432c-8854-dd023a1753d1',
+    'issueDate' => '2026-09-23',
+    'issueTime' => '10:00:00',
+    'currency' => 'SAR',
+    'icv' => 1,          // invoice counter, sequential per EGS device
+    'pih' => '...',      // previous invoice hash (base64)
+    'seller' => [
+        'name' => 'Test Seller', 'vatNumber' => '310122393500003',
+        'crNumber' => '1010010000', 'street' => 'Test St',
+        'city' => 'Riyadh', 'postalCode' => '11564', 'countryCode' => 'SA',
+    ],
+    'lines' => [
+        ['name' => 'Item A', 'quantity' => 2, 'unitPrice' => 100.0, 'vatPercent' => 15.0],
+    ],
+]);
+
+// B2B invoices requiring clearance:
+$xml = InvoiceBuilder::standard([...$data, 'buyer' => ['name' => '...', 'vatNumber' => '...', ...]]);
+```
+
+Supports `invoice` (388), `credit` (383) and `debit` (381) via `'type' => ...`.
+The builder emits the **unsigned** invoice (no UBLExtensions/QR/signature);
+feed it to the hashing service, then `InvoiceSigningService::sign()`,
+which inserts the fragments with namespace-aware DOM handling.
+
+## Renew a Production Certificate
+
+```php
+$service = (new \Zid\Zatca\Zatca(\Zid\Zatca\Enums\ZatcaEnvironment::PRODUCTION))->production();
+
+$csid = $service->renewProductionCertificate(
+    binarySecurityToken: $pcsid->certificate,
+    secret: $pcsid->secret,
+    otp: 'renewal-otp-from-fatoora-portal',
+    b64Csr: $newCsr,
+);
+```
 
 ## Examples
 

@@ -101,6 +101,14 @@ class ZatcaClient implements ZatcaClientInterface
         return $this->send('POST', $endpoint, $payload, $headers);
     }
 
+    public function patchRequest(
+        string $endpoint,
+        array $payload = [],
+        array $headers = [],
+    ): array {
+        return $this->send('PATCH', $endpoint, $payload, $headers);
+    }
+
     public function complianceApi(): ComplianceApi
     {
         return new ComplianceApi($this);
@@ -109,6 +117,11 @@ class ZatcaClient implements ZatcaClientInterface
     public function productionApi(): ProductionApi
     {
         return new ProductionApi($this);
+    }
+
+    public function renewalApi(): RenewalApi
+    {
+        return new RenewalApi($this);
     }
 
     public function reportingApi(): ReportingApi

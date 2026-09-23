@@ -29,4 +29,15 @@ class ProductionCsidGeneratorService
             requestId: $result['requestID'],
         );
     }
+
+    public function renewProductionCertificate(string $binarySecurityToken, string $secret, string $otp, string $b64Csr): CSID
+    {
+        $result = $this->zatcaClient->renewalApi()->renewProductionCertificate($binarySecurityToken, $secret, $otp, $b64Csr);
+
+        return new CSID(
+            certificate: $result['binarySecurityToken'],
+            secret: $result['secret'],
+            requestId: $result['requestID'],
+        );
+    }
 }

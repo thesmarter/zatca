@@ -118,6 +118,16 @@ class Zatca
     }
 
     /**
+     * Create a new UBL invoice builder for the given invoice data.
+     *
+     * @see InvoiceBuilder::build() for the expected data shape.
+     */
+    public function invoiceBuilder(array $data = []): InvoiceBuilder
+    {
+        return new InvoiceBuilder($data);
+    }
+
+    /**
      * Create a new CSR builder instance
      */
     public function csrBuilder(): CertificateSigningRequestBuilder

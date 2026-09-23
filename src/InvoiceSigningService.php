@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Zid\Zatca;
 
 use DateTime;
+use DOMDocument;
+use DOMNode;
+use DOMXPath;
 use Zid\Zatca\Entities\CSID;
 use Zid\Zatca\Entities\InvoiceSigningResult;
 use Zid\Zatca\Exceptions\InvoiceSigningException;
@@ -61,21 +64,14 @@ class InvoiceSigningService
         $stringUBLExtension = str_replace("ISSUER_NAME", $issuerName, $stringUBLExtension);
         $stringUBLExtension = str_replace("SERIAL_NUMBER", $serialNumber, $stringUBLExtension);
 
-        // Insert UBL into XML
-        $insertPosition = strpos($canonicalXml, '>') + 1; // Find position after the first '>'
-        $updatedXmlString = substr_replace($canonicalXml, $stringUBLExtension, $insertPosition, 0);
-
-        // Load signature template content
+        // Load the QR/signature template content.
         $stringSignature = file_get_contents($signaturePath);
-        $stringSignature = str_replace("BASE64_QRCODE", $qrCode, $stringSignature);
+        $stringSignature = str_replace('BASE64_QRCODE', $qrCode, $stringSignature);
 
-        // Insert signature string before <cac:AccountingSupplierParty>
-        $insertPositionSignature = strpos($updatedXmlString, '<cac:AccountingSupplierParty>'); // Find position of the opening tag
-        if ($insertPositionSignature !== false) {
-            $updatedXmlString = substr_replace($updatedXmlString, $stringSignature, $insertPositionSignature, 0);
-        } else {
-            throw new InvoiceSigningException("The <cac:AccountingSupplierParty> tag was not found in the XML.");
-        }
+        // Insert UBL extension as the first child of the invoice root and the
+        // QR/signature block before the supplier party, using DOM so the
+        // result never depends on exact whitespace or tag formatting.
+        $updatedXmlString = $this->insertSignedFragments($canonicalXml, $stringUBLExtension, $stringSignature);
 
         $base64Invoice = base64_encode($xmlDeclaration . "\n" . $updatedXmlString);
 
@@ -84,6 +80,93 @@ class InvoiceSigningService
             b64SignedInvoice: $base64Invoice,
             b64QrCode: $qrCode,
         );
+    }
+
+    /**
+     * Insert the populated UBLExtensions fragment as the first child of the
+     * invoice root and the QR/signature fragment before the supplier party.
+     *
+     * The templates use the host document's namespace prefixes without
+     * redeclaring them, so each fragment is parsed inside a wrapper that
+     * declares the UBL namespaces and the resulting nodes are imported.
+     *
+     * @throws InvoiceSigningException
+     */
+    private function insertSignedFragments(string $canonicalXml, string $ublExtensionXml, string $signatureXml): string
+    {
+        $dom = new DOMDocument('1.0', 'utf-8');
+        $dom->preserveWhiteSpace = true;
+
+        if (@$dom->loadXML($canonicalXml) === false || $dom->documentElement === null) {
+            throw new InvoiceSigningException('The canonical invoice XML could not be parsed.');
+        }
+
+        $root = $dom->documentElement;
+
+        foreach ($this->parseFragment($ublExtensionXml) as $node) {
+            $root->insertBefore($dom->importNode($node, true), $root->firstChild);
+        }
+
+        $xpath = new DOMXPath($dom);
+        $xpath->registerNamespace('cac', 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2');
+
+        $parties = $xpath->query('//cac:AccountingSupplierParty');
+        if ($parties === false || $parties->length === 0) {
+            $parties = $xpath->query('//*[local-name()="AccountingSupplierParty"]');
+        }
+
+        if ($parties === false || $parties->length === 0) {
+            throw new InvoiceSigningException('The <cac:AccountingSupplierParty> tag was not found in the XML.');
+        }
+
+        /** @var DOMNode $party */
+        $party = $parties->item(0);
+        $parent = $party->parentNode;
+        if ($parent === null) {
+            throw new InvoiceSigningException('The <cac:AccountingSupplierParty> tag has no parent node.');
+        }
+
+        foreach ($this->parseFragment($signatureXml) as $node) {
+            $parent->insertBefore($dom->importNode($node, true), $party);
+        }
+
+        $out = $dom->saveXML($dom->documentElement);
+        if ($out === false) {
+            throw new InvoiceSigningException('The signed invoice XML could not be serialized.');
+        }
+
+        return $out;
+    }
+
+    /**
+     * Parse an XML fragment (one or more top-level elements) by wrapping it
+     * in a root that declares the UBL namespaces used by the templates.
+     *
+     * @return iterable<DOMNode>
+     *
+     * @throws InvoiceSigningException
+     */
+    private function parseFragment(string $fragmentXml): iterable
+    {
+        $wrapped = '<zatca-fragment'
+            . ' xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"'
+            . ' xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"'
+            . ' xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2"'
+            . '>' . $fragmentXml . '</zatca-fragment>';
+
+        $tmp = new DOMDocument('1.0', 'utf-8');
+        if (@$tmp->loadXML($wrapped) === false || $tmp->documentElement === null) {
+            throw new InvoiceSigningException('A signature template fragment could not be parsed.');
+        }
+
+        $nodes = [];
+        foreach ($tmp->documentElement->childNodes as $child) {
+            if ($child->nodeType === XML_ELEMENT_NODE) {
+                $nodes[] = $child;
+            }
+        }
+
+        return $nodes;
     }
 
     private function getIssuerName($certInfo) {
